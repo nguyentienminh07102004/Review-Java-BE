@@ -16,10 +16,10 @@ public class DistrictRepository extends AbstractRepository<DistrictEntity> imple
     private IRowMapper<DistrictEntity> rowMapper;
 
     @Override
-    public DistrictEntity findById(Long id) throws SQLException, ClassNotFoundException {
+    public DistrictEntity findById(Long id) {
         String sql = "SELECT d.id, d.name, d.code FROM district d WHERE id = ?";
         List<DistrictEntity> districtEntity = query(sql, rowMapper, id);
-        if(districtEntity != null || !districtEntity.isEmpty()) {
+        if(districtEntity != null && !districtEntity.isEmpty()) {
             return districtEntity.get(0);
         }
         return null;

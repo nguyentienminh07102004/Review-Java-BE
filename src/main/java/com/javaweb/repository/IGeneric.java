@@ -6,5 +6,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IGeneric<T> {
-    List<T> query(String sql, IRowMapper<T> rowMapper, Object... params) throws SQLException, ClassNotFoundException;
+    List<T> query(String sql, IRowMapper<T> rowMapper, Object... params);
 }

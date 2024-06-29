@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface IBuildingService {
-    List<BuildingDTO> findBuilding(Map<String, String> params, List<String> typeCode) throws SQLException, ClassNotFoundException, NumberFormatException;
+    List<BuildingDTO> findBuilding(Map<String, String> params, List<String> typeCode);
 }

@@ -1,10 +1,11 @@
 package com.javaweb.service.IMPL;
 
+import com.javaweb.Builder.BuildingSearchBuilder;
+import com.javaweb.convertor.BuildingConverter;
+import com.javaweb.convertor.BuildingSearchBuilderConvertor;
 import com.javaweb.model.BuildingDTO;
 import com.javaweb.repository.IBuildingRepository;
-import com.javaweb.repository.IDistrictRepository;
 import com.javaweb.repository.entity.BuildingEntity;
-import com.javaweb.repository.entity.DistrictEntity;
 import com.javaweb.service.IBuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,23 +22,17 @@ public class BuildingService implements IBuildingService {
     private IBuildingRepository buildingRepository;
 
     @Autowired
-    private IDistrictRepository districtRepository;
+    private BuildingConverter buildingConverter;
+
+    @Autowired
+    private BuildingSearchBuilderConvertor buildingSearchBuilderConvertor;
 
     @Override
-    public List<BuildingDTO> findBuilding(Map<String, String> params, List<String> typeCode) throws ClassNotFoundException, SQLException, NumberFormatException {
-        List<BuildingEntity> buildingEntityList = buildingRepository.findBuilding(params, typeCode);
+    public List<BuildingDTO> findBuilding(Map<String, String> params, List<String> typeCode) {
+        List<BuildingEntity> buildingEntityList = buildingRepository.findBuilding(buildingSearchBuilderConvertor.toBuildingSearchBuilder(params, typeCode));
         List<BuildingDTO> result = new ArrayList<>();
         for(BuildingEntity buildingEntity : buildingEntityList) {
-            BuildingDTO building = new BuildingDTO();
-            building.setName(buildingEntity.getName());
-            building.setAddress(buildingEntity.getStreet() + ", " + buildingEntity.getWard() + ", " + districtRepository.findById(buildingEntity.getDistrictId()).getName());
-            building.setBrokerageFee(buildingEntity.getBrokerageFee());
-            building.setServiceFee(buildingEntity.getServiceFee());
-            building.setFloorArea(buildingEntity.getFloorArea());
-            building.setManagerName(buildingEntity.getManagerName());
-            building.setManagerPhoneNumber(buildingEntity.getManagerPhoneNumber());
-            building.setRentPrice(buildingEntity.getRentPrice());
-            building.setNumberOfBasement(buildingEntity.getNumberOfBasement());
+            BuildingDTO building = buildingConverter.EntityToDTO(buildingEntity);
             result.add(building);
         }
         return result;
